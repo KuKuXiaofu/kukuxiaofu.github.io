@@ -1,0 +1,888 @@
+<html lang="zh-CN" class="scroll-smooth"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个人作品集 | Portfolio</title>
+    <!-- Tailwind CSS v3 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Tailwind 配置 -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            200: '#bae6fd',
+                            300: '#7dd3fc',
+                            400: '#38bdf8',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                        },
+                        accent: {
+                            500: '#8b5cf6',
+                            600: '#7c3aed',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.6s ease-out',
+                        'slide-up': 'slideUp 0.6s ease-out',
+                        'float': 'float 3s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        slideUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- 自定义样式 -->
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .text-gradient {
+                background-clip: text;
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+            }
+            .bg-glass {
+                backdrop-filter: blur(10px);
+                -webkit-backdrop-filter: blur(10px);
+            }
+        }
+    </style>
+    
+    <style>
+        /* 自定义滚动条 */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        .dark ::-webkit-scrollbar-track {
+            background: #1f2937;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+        
+        /* 技能进度条动画 */
+        .skill-bar {
+            transition: width 1s ease-out;
+        }
+        
+        /* 卡片悬停效果 */
+        .project-card {
+            transition: all 0.3s ease;
+        }
+        .project-card:hover {
+            transform: translateY(-8px);
+        }
+        
+        /* 导航栏过渡 */
+        .navbar {
+            transition: all 0.3s ease;
+        }
+        
+        /* 模式切换过渡 */
+        * {
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
+    <!-- 导航栏 -->
+    <nav id="navbar" class="navbar fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-gray-900/80 bg-glass">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <a href="#home" class="text-2xl font-bold text-gradient bg-gradient-to-r from-primary-500 to-accent-500">
+                    Portfolio
+                </a>
+                
+                <!-- 桌面端菜单 -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#home" class="nav-link hover:text-primary-500 font-medium">首页</a>
+                    <a href="#about" class="nav-link hover:text-primary-500 font-medium">关于我</a>
+                    <a href="#skills" class="nav-link hover:text-primary-500 font-medium">技能</a>
+                    <a href="#projects" class="nav-link hover:text-primary-500 font-medium">作品</a>
+                    <a href="#contact" class="nav-link hover:text-primary-500 font-medium">联系</a>
+                    
+                    <!-- 深色模式切换 -->
+                    <button id="theme-toggle" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800">
+                        <i class="fas fa-moon dark:hidden text-gray-600"></i>
+                        <i class="fas fa-sun hidden dark:block text-yellow-400"></i>
+                    </button>
+                </div>
+                
+                <!-- 移动端菜单按钮 -->
+                <div class="md:hidden flex items-center space-x-4">
+                    <button id="theme-toggle-mobile" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800">
+                        <i class="fas fa-moon dark:hidden text-gray-600"></i>
+                        <i class="fas fa-sun hidden dark:block text-yellow-400"></i>
+                    </button>
+                    <button id="menu-toggle" class="p-2">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 移动端菜单 -->
+        <div id="mobile-menu" class="md:hidden hidden bg-white dark:bg-gray-900 border-t dark:border-gray-800">
+            <div class="px-4 py-4 space-y-3">
+                <a href="#home" class="block py-2 hover:text-primary-500 font-medium">首页</a>
+                <a href="#about" class="block py-2 hover:text-primary-500 font-medium">关于我</a>
+                <a href="#skills" class="block py-2 hover:text-primary-500 font-medium">技能</a>
+                <a href="#projects" class="block py-2 hover:text-primary-500 font-medium">作品</a>
+                <a href="#contact" class="block py-2 hover:text-primary-500 font-medium">联系</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero 区域 -->
+    <section id="home" class="min-h-screen flex items-center pt-16 bg-gradient-to-br from-primary-50 via-white to-accent-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <!-- 左侧文字 -->
+                <div class="animate-slide-up">
+                    <p class="text-primary-500 font-semibold mb-4">👋 你好，我是</p>
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6">
+                        <span class="text-gradient bg-gradient-to-r from-primary-500 to-accent-500">小夫</span>
+                    </h1>
+                    <h2 class="text-2xl sm:text-3xl font-semibold text-gray-600 dark:text-gray-400 mb-6">
+                        全栈开发工程师
+                    </h2>
+                    <p class="text-lg text-gray-600 dark:text-gray-400 mb-8 leading-relaxed">
+                        热爱创造优雅的数字体验，专注于构建高性能、用户友好的Web应用程序。
+                        拥有5年开发经验，擅长前端架构设计和后端系统开发。
+                    </p>
+                    
+                    <!-- CTA 按钮 -->
+                    <div class="flex flex-wrap gap-4 mb-8">
+                        <a href="#projects" class="px-8 py-3 bg-gradient-to-r from-primary-500 to-accent-500 text-white font-semibold rounded-full hover:shadow-lg hover:shadow-primary-500/30 transform hover:scale-105 transition-all duration-300">
+                            查看作品
+                        </a>
+                        <a href="#contact" class="px-8 py-3 border-2 border-primary-500 text-primary-500 font-semibold rounded-full hover:bg-primary-500 hover:text-white transition-all duration-300">
+                            联系我
+                        </a>
+                    </div>
+                    
+                    <!-- 社交链接 -->
+                    <div class="flex space-x-4">
+                        <a href="#" class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-primary-500 hover:text-white transition-all duration-300">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-blue-500 hover:text-white transition-all duration-300">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-blue-400 hover:text-white transition-all duration-300">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-red-500 hover:text-white transition-all duration-300">
+                            <i class="fab fa-dribbble"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- 右侧头像 -->
+                <div class="flex justify-center animate-float">
+                    <div class="relative">
+                        <!-- 装饰圆环 -->
+                        <div class="absolute inset-0 bg-gradient-to-r from-primary-500 to-accent-500 rounded-full blur-2xl opacity-30 animate-pulse"></div>
+                        <!-- 头像占位 -->
+                        <div class="relative w-72 h-72 sm:w-80 sm:h-80 rounded-full bg-gradient-to-br from-primary-400 to-accent-500 p-1">
+                            <div class="w-full h-full rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center overflow-hidden">
+                                <i class="fas fa-user text-8xl text-gray-400 dark:text-gray-500"></i>
+                            </div>
+                        </div>
+                        <!-- 装饰元素 -->
+                        <div class="absolute -top-4 -right-4 w-16 h-16 bg-yellow-400 rounded-full opacity-80"></div>
+                        <div class="absolute -bottom-4 -left-4 w-12 h-12 bg-primary-400 rounded-full opacity-80"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 关于我 -->
+    <section id="about" class="py-20 bg-white dark:bg-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl sm:text-4xl font-bold mb-4">关于我</h2>
+                <div class="w-20 h-1 bg-gradient-to-r from-primary-500 to-accent-500 mx-auto rounded-full"></div>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <!-- 左侧图片 -->
+                <div class="relative">
+                    <div class="absolute inset-0 bg-gradient-to-r from-primary-500 to-accent-500 rounded-2xl transform rotate-3"></div>
+                    <div class="relative bg-gray-200 dark:bg-gray-700 rounded-2xl h-96 flex items-center justify-center">
+                        <i class="fas fa-code text-9xl text-gray-400 dark:text-gray-500"></i>
+                    </div>
+                </div>
+                
+                <!-- 右侧文字 -->
+                <div>
+                    <h3 class="text-2xl font-bold mb-6">全栈开发者 &amp; UI/UX 爱好者</h3>
+                    <p class="text-gray-600 dark:text-gray-400 mb-6 leading-relaxed">
+                        我是一名充满激情的全栈开发工程师，专注于创建美观且功能强大的Web应用程序。
+                        我相信好的设计和干净的代码可以改变世界。
+                    </p>
+                    <p class="text-gray-600 dark:text-gray-400 mb-8 leading-relaxed">
+                        在过去的5年里，我参与了多个大型项目的开发，从电商平台到企业级SaaS应用。
+                        我热衷于学习新技术，并将其应用到实际项目中，不断追求技术卓越。
+                    </p>
+                    
+                    <!-- 快速信息 -->
+                    <div class="grid grid-cols-2 gap-4 mb-8">
+                        <div class="flex items-center space-x-3">
+                            <i class="fas fa-map-marker-alt text-primary-500"></i>
+                            <span>上海，中国</span>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <i class="fas fa-envelope text-primary-500"></i>
+                            <span>hello@example.com</span>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <i class="fas fa-graduation-cap text-primary-500"></i>
+                            <span>计算机科学硕士</span>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <i class="fas fa-briefcase text-primary-500"></i>
+                            <span>5年工作经验</span>
+                        </div>
+                    </div>
+                    
+                    <a href="#" class="inline-flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-primary-500 to-accent-500 text-white font-semibold rounded-full hover:shadow-lg transition-all duration-300">
+                        <i class="fas fa-download"></i>
+                        <span>下载简历</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 技能展示 -->
+    <section id="skills" class="py-20 bg-gray-50 dark:bg-gray-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl sm:text-4xl font-bold mb-4">专业技能</h2>
+                <div class="w-20 h-1 bg-gradient-to-r from-primary-500 to-accent-500 mx-auto rounded-full"></div>
+                <p class="mt-4 text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+                    多年的学习和实践让我掌握了丰富的技术栈，以下是我的核心技能
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-12">
+                <!-- 前端技能 -->
+                <div>
+                    <h3 class="text-xl font-bold mb-6 flex items-center">
+                        <i class="fas fa-laptop-code text-primary-500 mr-3"></i>
+                        前端开发
+                    </h3>
+                    
+                    <div class="space-y-6">
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="font-medium">HTML5 / CSS3</span>
+                                <span class="text-primary-500">95%</span>
+                            </div>
+                            <div class="h-3 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                                <div class="skill-bar h-full bg-gradient-to-r from-primary-500 to-accent-500 rounded-full" style="width: 95%"></div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="font-medium">JavaScript / TypeScript</span>
+                                <span class="text-primary-500">90%</span>
+                            </div>
+                            <div class="h-3 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                                <div class="skill-bar h-full bg-gradient-to-r from-primary-500 to-accent-500 rounded-full" style="width: 90%"></div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="font-medium">React / Vue.js</span>
+                                <span class="text-primary-500">88%</span>
+                            </div>
+                            <div class="h-3 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                                <div class="skill-bar h-full bg-gradient-to-r from-primary-500 to-accent-500 rounded-full" style="width: 88%"></div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="font-medium">Tailwind CSS</span>
+                                <span class="text-primary-500">92%</span>
+                            </div>
+                            <div class="h-3 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                                <div class="skill-bar h-full bg-gradient-to-r from-primary-500 to-accent-500 rounded-full" style="width: 92%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 后端技能 -->
+                <div>
+                    <h3 class="text-xl font-bold mb-6 flex items-center">
+                        <i class="fas fa-server text-primary-500 mr-3"></i>
+                        后端开发
+                    </h3>
+                    
+                    <div class="space-y-6">
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="font-medium">Node.js / Express</span>
+                                <span class="text-primary-500">85%</span>
+                            </div>
+                            <div class="h-3 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                                <div class="skill-bar h-full bg-gradient-to-r from-primary-500 to-accent-500 rounded-full" style="width: 85%"></div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="font-medium">Python / Django</span>
+                                <span class="text-primary-500">80%</span>
+                            </div>
+                            <div class="h-3 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                                <div class="skill-bar h-full bg-gradient-to-r from-primary-500 to-accent-500 rounded-full" style="width: 80%"></div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="font-medium">MySQL / MongoDB</span>
+                                <span class="text-primary-500">82%</span>
+                            </div>
+                            <div class="h-3 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                                <div class="skill-bar h-full bg-gradient-to-r from-primary-500 to-accent-500 rounded-full" style="width: 82%"></div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="font-medium">Docker / AWS</span>
+                                <span class="text-primary-500">75%</span>
+                            </div>
+                            <div class="h-3 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                                <div class="skill-bar h-full bg-gradient-to-r from-primary-500 to-accent-500 rounded-full" style="width: 75%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 技能标签云 -->
+            <div class="mt-16">
+                <h3 class="text-xl font-bold mb-8 text-center">其他技能 &amp; 工具</h3>
+                <div class="flex flex-wrap justify-center gap-3">
+                    <span class="px-4 py-2 bg-white dark:bg-gray-800 rounded-full shadow-md hover:shadow-lg hover:scale-105 transition-all duration-300 cursor-default">Git</span>
+                    <span class="px-4 py-2 bg-white dark:bg-gray-800 rounded-full shadow-md hover:shadow-lg hover:scale-105 transition-all duration-300 cursor-default">Webpack</span>
+                    <span class="px-4 py-2 bg-white dark:bg-gray-800 rounded-full shadow-md hover:shadow-lg hover:scale-105 transition-all duration-300 cursor-default">Vite</span>
+                    <span class="px-4 py-2 bg-white dark:bg-gray-800 rounded-full shadow-md hover:shadow-lg hover:scale-105 transition-all duration-300 cursor-default">Jest</span>
+                    <span class="px-4 py-2 bg-white dark:bg-gray-800 rounded-full shadow-md hover:shadow-lg hover:scale-105 transition-all duration-300 cursor-default">Figma</span>
+                    <span class="px-4 py-2 bg-white dark:bg-gray-800 rounded-full shadow-md hover:shadow-lg hover:scale-105 transition-all duration-300 cursor-default">Photoshop</span>
+                    <span class="px-4 py-2 bg-white dark:bg-gray-800 rounded-full shadow-md hover:shadow-lg hover:scale-105 transition-all duration-300 cursor-default">REST API</span>
+                    <span class="px-4 py-2 bg-white dark:bg-gray-800 rounded-full shadow-md hover:shadow-lg hover:scale-105 transition-all duration-300 cursor-default">GraphQL</span>
+                    <span class="px-4 py-2 bg-white dark:bg-gray-800 rounded-full shadow-md hover:shadow-lg hover:scale-105 transition-all duration-300 cursor-default">CI/CD</span>
+                    <span class="px-4 py-2 bg-white dark:bg-gray-800 rounded-full shadow-md hover:shadow-lg hover:scale-105 transition-all duration-300 cursor-default">Agile</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 项目作品集 -->
+    <section id="projects" class="py-20 bg-white dark:bg-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl sm:text-4xl font-bold mb-4">精选作品</h2>
+                <div class="w-20 h-1 bg-gradient-to-r from-primary-500 to-accent-500 mx-auto rounded-full"></div>
+                <p class="mt-4 text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+                    以下是我参与开发的一些代表性项目，展示了我在不同领域的技术能力
+                </p>
+            </div>
+            
+            <!-- 项目卡片网格 -->
+            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- 项目卡片 1 -->
+                <div class="project-card bg-gray-50 dark:bg-gray-900 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl">
+                    <div class="h-48 bg-gradient-to-br from-primary-400 to-primary-600 flex items-center justify-center">
+                        <i class="fas fa-shopping-cart text-6xl text-white/80"></i>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">电商平台</h3>
+                        <p class="text-gray-600 dark:text-gray-400 mb-4 text-sm">
+                            全功能电商解决方案，支持商品管理、购物车、支付集成、订单追踪等功能。
+                        </p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="px-2 py-1 text-xs bg-primary-100 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400 rounded">React</span>
+                            <span class="px-2 py-1 text-xs bg-primary-100 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400 rounded">Node.js</span>
+                            <span class="px-2 py-1 text-xs bg-primary-100 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400 rounded">MongoDB</span>
+                        </div>
+                        <div class="flex space-x-4">
+                            <a href="#" class="text-primary-500 hover:text-primary-600 font-medium">
+                                <i class="fas fa-external-link-alt mr-1"></i> 预览
+                            </a>
+                            <a href="#" class="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 font-medium">
+                                <i class="fab fa-github mr-1"></i> 源码
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 项目卡片 2 -->
+                <div class="project-card bg-gray-50 dark:bg-gray-900 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl">
+                    <div class="h-48 bg-gradient-to-br from-accent-400 to-accent-600 flex items-center justify-center">
+                        <i class="fas fa-tasks text-6xl text-white/80"></i>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">项目管理系统</h3>
+                        <p class="text-gray-600 dark:text-gray-400 mb-4 text-sm">
+                            企业级项目管理工具，支持任务分配、进度追踪、团队协作、数据统计。
+                        </p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="px-2 py-1 text-xs bg-primary-100 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400 rounded">Vue.js</span>
+                            <span class="px-2 py-1 text-xs bg-primary-100 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400 rounded">Django</span>
+                            <span class="px-2 py-1 text-xs bg-primary-100 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400 rounded">PostgreSQL</span>
+                        </div>
+                        <div class="flex space-x-4">
+                            <a href="#" class="text-primary-500 hover:text-primary-600 font-medium">
+                                <i class="fas fa-external-link-alt mr-1"></i> 预览
+                            </a>
+                            <a href="#" class="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 font-medium">
+                                <i class="fab fa-github mr-1"></i> 源码
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 项目卡片 3 -->
+                <div class="project-card bg-gray-50 dark:bg-gray-900 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl">
+                    <div class="h-48 bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center">
+                        <i class="fas fa-chart-line text-6xl text-white/80"></i>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">数据可视化平台</h3>
+                        <p class="text-gray-600 dark:text-gray-400 mb-4 text-sm">
+                            交互式数据可视化仪表板，支持多种图表类型和实时数据更新。
+                        </p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="px-2 py-1 text-xs bg-primary-100 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400 rounded">D3.js</span>
+                            <span class="px-2 py-1 text-xs bg-primary-100 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400 rounded">React</span>
+                            <span class="px-2 py-1 text-xs bg-primary-100 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400 rounded">Python</span>
+                        </div>
+                        <div class="flex space-x-4">
+                            <a href="#" class="text-primary-500 hover:text-primary-600 font-medium">
+                                <i class="fas fa-external-link-alt mr-1"></i> 预览
+                            </a>
+                            <a href="#" class="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 font-medium">
+                                <i class="fab fa-github mr-1"></i> 源码
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 项目卡片 4 -->
+                <div class="project-card bg-gray-50 dark:bg-gray-900 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl">
+                    <div class="h-48 bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center">
+                        <i class="fas fa-mobile-alt text-6xl text-white/80"></i>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">移动端App</h3>
+                        <p class="text-gray-600 dark:text-gray-400 mb-4 text-sm">
+                            跨平台移动应用，支持iOS和Android，包含社交、消息、支付等功能。
+                        </p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="px-2 py-1 text-xs bg-primary-100 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400 rounded">React Native</span>
+                            <span class="px-2 py-1 text-xs bg-primary-100 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400 rounded">Firebase</span>
+                            <span class="px-2 py-1 text-xs bg-primary-100 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400 rounded">Redux</span>
+                        </div>
+                        <div class="flex space-x-4">
+                            <a href="#" class="text-primary-500 hover:text-primary-600 font-medium">
+                                <i class="fas fa-external-link-alt mr-1"></i> 预览
+                            </a>
+                            <a href="#" class="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 font-medium">
+                                <i class="fab fa-github mr-1"></i> 源码
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 项目卡片 5 -->
+                <div class="project-card bg-gray-50 dark:bg-gray-900 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl">
+                    <div class="h-48 bg-gradient-to-br from-pink-400 to-pink-600 flex items-center justify-center">
+                        <i class="fas fa-robot text-6xl text-white/80"></i>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">AI 聊天机器人</h3>
+                        <p class="text-gray-600 dark:text-gray-400 mb-4 text-sm">
+                            基于大语言模型的智能客服系统，支持多轮对话和知识库问答。
+                        </p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="px-2 py-1 text-xs bg-primary-100 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400 rounded">Python</span>
+                            <span class="px-2 py-1 text-xs bg-primary-100 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400 rounded">LangChain</span>
+                            <span class="px-2 py-1 text-xs bg-primary-100 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400 rounded">FastAPI</span>
+                        </div>
+                        <div class="flex space-x-4">
+                            <a href="#" class="text-primary-500 hover:text-primary-600 font-medium">
+                                <i class="fas fa-external-link-alt mr-1"></i> 预览
+                            </a>
+                            <a href="#" class="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 font-medium">
+                                <i class="fab fa-github mr-1"></i> 源码
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 项目卡片 6 -->
+                <div class="project-card bg-gray-50 dark:bg-gray-900 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl">
+                    <div class="h-48 bg-gradient-to-br from-cyan-400 to-cyan-600 flex items-center justify-center">
+                        <i class="fas fa-palette text-6xl text-white/80"></i>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">设计系统</h3>
+                        <p class="text-gray-600 dark:text-gray-400 mb-4 text-sm">
+                            企业级UI组件库和设计系统，包含50+可复用组件和完整文档。
+                        </p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="px-2 py-1 text-xs bg-primary-100 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400 rounded">Storybook</span>
+                            <span class="px-2 py-1 text-xs bg-primary-100 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400 rounded">TypeScript</span>
+                            <span class="px-2 py-1 text-xs bg-primary-100 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400 rounded">Figma</span>
+                        </div>
+                        <div class="flex space-x-4">
+                            <a href="#" class="text-primary-500 hover:text-primary-600 font-medium">
+                                <i class="fas fa-external-link-alt mr-1"></i> 预览
+                            </a>
+                            <a href="#" class="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 font-medium">
+                                <i class="fab fa-github mr-1"></i> 源码
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 查看更多按钮 -->
+            <div class="text-center mt-12">
+                <a href="#" class="inline-flex items-center space-x-2 px-8 py-3 border-2 border-primary-500 text-primary-500 font-semibold rounded-full hover:bg-primary-500 hover:text-white transition-all duration-300">
+                    <span>查看更多项目</span>
+                    <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 联系方式 -->
+    <section id="contact" class="py-20 bg-gray-50 dark:bg-gray-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl sm:text-4xl font-bold mb-4">联系我</h2>
+                <div class="w-20 h-1 bg-gradient-to-r from-primary-500 to-accent-500 mx-auto rounded-full"></div>
+                <p class="mt-4 text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+                    有项目合作或工作机会？欢迎随时与我联系，我会尽快回复您
+                </p>
+            </div>
+            
+            <div class="grid lg:grid-cols-2 gap-12">
+                <!-- 联系信息 -->
+                <div>
+                    <h3 class="text-2xl font-bold mb-8">让我们开始合作</h3>
+                    
+                    <div class="space-y-6">
+                        <div class="flex items-start space-x-4">
+                            <div class="w-12 h-12 flex items-center justify-center rounded-full bg-primary-100 dark:bg-primary-900/30 text-primary-500 flex-shrink-0">
+                                <i class="fas fa-envelope text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold mb-1">邮箱</h4>
+                                <p class="text-gray-600 dark:text-gray-400">hello@example.com</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start space-x-4">
+                            <div class="w-12 h-12 flex items-center justify-center rounded-full bg-primary-100 dark:bg-primary-900/30 text-primary-500 flex-shrink-0">
+                                <i class="fas fa-phone text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold mb-1">电话</h4>
+                                <p class="text-gray-600 dark:text-gray-400">+86 138 0000 0000</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start space-x-4">
+                            <div class="w-12 h-12 flex items-center justify-center rounded-full bg-primary-100 dark:bg-primary-900/30 text-primary-500 flex-shrink-0">
+                                <i class="fas fa-map-marker-alt text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold mb-1">地址</h4>
+                                <p class="text-gray-600 dark:text-gray-400">上海市浦东新区</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 社交链接 -->
+                    <div class="mt-10">
+                        <h4 class="font-semibold mb-4">关注我</h4>
+                        <div class="flex space-x-4">
+                            <a href="#" class="w-12 h-12 flex items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-primary-500 hover:text-white transition-all duration-300">
+                                <i class="fab fa-github text-xl"></i>
+                            </a>
+                            <a href="#" class="w-12 h-12 flex items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-blue-600 hover:text-white transition-all duration-300">
+                                <i class="fab fa-linkedin text-xl"></i>
+                            </a>
+                            <a href="#" class="w-12 h-12 flex items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-blue-400 hover:text-white transition-all duration-300">
+                                <i class="fab fa-twitter text-xl"></i>
+                            </a>
+                            <a href="#" class="w-12 h-12 flex items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-green-500 hover:text-white transition-all duration-300">
+                                <i class="fab fa-weixin text-xl"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 联系表单 -->
+                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
+                    <form id="contact-form">
+                        <div class="grid sm:grid-cols-2 gap-6 mb-6">
+                            <div>
+                                <label class="block text-sm font-medium mb-2">姓名</label>
+                                <input type="text" class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition-all" placeholder="您的姓名">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-2">邮箱</label>
+                                <input type="email" class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition-all" placeholder="您的邮箱">
+                            </div>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <label class="block text-sm font-medium mb-2">主题</label>
+                            <input type="text" class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition-all" placeholder="消息主题">
+                        </div>
+                        
+                        <div class="mb-6">
+                            <label class="block text-sm font-medium mb-2">消息内容</label>
+                            <textarea rows="5" class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition-all resize-none" placeholder="请输入您的消息..."></textarea>
+                        </div>
+                        
+                        <button type="submit" class="w-full py-4 bg-gradient-to-r from-primary-500 to-accent-500 text-white font-semibold rounded-lg hover:shadow-lg hover:shadow-primary-500/30 transform hover:scale-[1.02] transition-all duration-300">
+                            <i class="fas fa-paper-plane mr-2"></i>
+                            发送消息
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="bg-gray-900 dark:bg-black text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-3 gap-8 mb-8">
+                <!-- 品牌 -->
+                <div>
+                    <a href="#home" class="text-2xl font-bold text-gradient bg-gradient-to-r from-primary-400 to-accent-400">
+                        Portfolio
+                    </a>
+                    <p class="mt-4 text-gray-400">
+                        创造优雅的数字体验，用代码改变世界。
+                    </p>
+                </div>
+                
+                <!-- 快速链接 -->
+                <div>
+                    <h4 class="font-semibold mb-4">快速链接</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="#home" class="hover:text-primary-400 transition-colors">首页</a></li>
+                        <li><a href="#about" class="hover:text-primary-400 transition-colors">关于我</a></li>
+                        <li><a href="#projects" class="hover:text-primary-400 transition-colors">作品</a></li>
+                        <li><a href="#contact" class="hover:text-primary-400 transition-colors">联系</a></li>
+                    </ul>
+                </div>
+                
+                <!-- 联系方式 -->
+                <div>
+                    <h4 class="font-semibold mb-4">联系方式</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li class="flex items-center space-x-2">
+                            <i class="fas fa-envelope text-primary-400"></i>
+                            <span>hello@example.com</span>
+                        </li>
+                        <li class="flex items-center space-x-2">
+                            <i class="fas fa-phone text-primary-400"></i>
+                            <span>+86 138 0000 0000</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 pt-8 flex flex-col sm:flex-row justify-between items-center">
+                <p class="text-gray-400 text-sm">
+                    © 2024 Portfolio. All rights reserved.
+                </p>
+                <div class="flex space-x-4 mt-4 sm:mt-0">
+                    <a href="#" class="text-gray-400 hover:text-primary-400 transition-colors">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-primary-400 transition-colors">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-primary-400 transition-colors">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 返回顶部按钮 -->
+    <button id="back-to-top" class="fixed bottom-8 right-8 w-12 h-12 bg-gradient-to-r from-primary-500 to-accent-500 text-white rounded-full shadow-lg opacity-0 invisible transition-all duration-300 hover:shadow-xl hover:scale-110 z-50">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- JavaScript -->
+    <script>
+        // ==================== 深色/浅色模式切换 ====================
+        const themeToggle = document.getElementById('theme-toggle');
+        const themeToggleMobile = document.getElementById('theme-toggle-mobile');
+        const html = document.documentElement;
+        
+        // 检查本地存储的主题偏好
+        if (localStorage.getItem('theme') === 'dark' || 
+            (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            html.classList.add('dark');
+        }
+        
+        function toggleTheme() {
+            html.classList.toggle('dark');
+            localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+        }
+        
+        themeToggle.addEventListener('click', toggleTheme);
+        themeToggleMobile.addEventListener('click', toggleTheme);
+        
+        // ==================== 移动端菜单 ====================
+        const menuToggle = document.getElementById('menu-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        menuToggle.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+        
+        // 点击菜单项后关闭移动端菜单
+        mobileMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+        
+        // ==================== 导航栏滚动效果 ====================
+        const navbar = document.getElementById('navbar');
+        
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('shadow-lg');
+                navbar.classList.remove('bg-white/80', 'dark:bg-gray-900/80');
+                navbar.classList.add('bg-white/95', 'dark:bg-gray-900/95');
+            } else {
+                navbar.classList.remove('shadow-lg');
+                navbar.classList.add('bg-white/80', 'dark:bg-gray-900/80');
+                navbar.classList.remove('bg-white/95', 'dark:bg-gray-900/95');
+            }
+        });
+        
+        // ==================== 返回顶部按钮 ====================
+        const backToTop = document.getElementById('back-to-top');
+        
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 500) {
+                backToTop.classList.remove('opacity-0', 'invisible');
+                backToTop.classList.add('opacity-100', 'visible');
+            } else {
+                backToTop.classList.add('opacity-0', 'invisible');
+                backToTop.classList.remove('opacity-100', 'visible');
+            }
+        });
+        
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+        
+        // ==================== 表单提交 ====================
+        const contactForm = document.getElementById('contact-form');
+        
+        contactForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('消息已发送！我会尽快回复您。');
+            contactForm.reset();
+        });
+        
+        // ==================== 技能进度条动画 ====================
+        const skillBars = document.querySelectorAll('.skill-bar');
+        
+        const observerOptions = {
+            threshold: 0.5
+        };
+        
+        const skillObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const bar = entry.target;
+                    const width = bar.style.width;
+                    bar.style.width = '0';
+                    setTimeout(() => {
+                        bar.style.width = width;
+                    }, 100);
+                }
+            });
+        }, observerOptions);
+        
+        skillBars.forEach(bar => skillObserver.observe(bar));
+        
+        // ==================== 平滑滚动 ====================
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+
+</body></html>
